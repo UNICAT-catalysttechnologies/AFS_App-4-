@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Graded Bed Selection Tool</title>
+  <style>
+@keyframes moveBackground {
+    0% { background-position: center center; }
+    25% { background-position: 52% 55%; }  /* Slight shift */
+    50% { background-position: 48% 60%; }  /* Moves diagonally down */
+    75% { background-position: 50% 45%; }  /* Moves diagonally up */
+    100% { background-position: center center; }
+}
+
+body {
+    animation: moveBackground 15s infinite alternate ease-in-out;
+}
+
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://i.postimg.cc/Y0ckbPmN/Graduate-Management-Trainee-1.png');
+      background-size: cover; /* Ensures the image covers the entire viewport */
+      background-position: center; /* Centers the image */
+      background-repeat: no-repeat; /* Prevents tiling */
+      background-color: rgb(16, 100, 146); /* Fallback color */
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+
+}
+#afsOptimizedLoad {
+    display: none !important;
+}
+
+ /* === Enhanced Table & Container Styling for Page 4 === */
+ #page4 .container {
+    background: #ffffff; /* Clean white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    text-align: center;
+    border-top: 6px solid rgb(16, 100, 146); /* AFS Theme Color */
+}
+
+/* Table Styling */
+#page4 table {
+    width: 95%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #ffffff; /* White background */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
+
+/* Table Header */
+#page4 th {
+    background: rgb(16, 100, 146); /* Thematic blue */
+    color: white; /* White text */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Table Rows */
+#page4 td {
+    padding: 12px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 400;
+    color: #444;
+    border-bottom: 1px solid #eee;
+}
+
+/* Alternating Row Colors */
+#page4 tbody tr:nth-child(even) {
+    background-color: #f7f7f7; /* Soft grey */
+}
+
+#page4 tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Hover Effect for Rows */
+#page4 tbody tr:hover {
+    background: #eaf6fa; /* Light AFS blue on hover */
+    transition: 0.2s ease-in-out;
+}
+
+/* Total Row Styling */
+#page4 tfoot tr {
+    background: #ddd;
+    color: #333;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* Buttons Styling */
+#page4 .button {
+    background: #007bff;
+    color: white;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    border: none;
+    transition: 0.3s ease-in-out;
+    margin-top: 15px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#page4 .button:hover {
+    background: rgb(12, 80, 120);
+}
+
+
+
+/* Total Row Cell Styling */
+#page4 tfoot td {
+    padding: 14px;
+    border-top: 2px solid #ccc;
+}
+
+/* Summary Box Styling */
+#page4 .summary {
+    background: rgb(245, 248, 250);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border-left: 5px solid rgb(16, 100, 146);
+}
+
+#page4 .summary p {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgb(16, 100, 146);
+    margin: 5px 0;
+}
+
+
+/* Improve dropdowns inside tables */
+#page4 table select {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+#page4 table select:focus {
+    outline: none;
+    border-color: rgb(16, 100, 146);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #page4 table {
+        font-size: 14px;
+    }
+    
+    #page4 th, #page4 td {
+        padding: 10px;
+    }
+    
+    #page4 .container {
+        padding: 20px;
+    }
+}
+
+    /* Page Transition Styles */
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow-y: auto;
+    width: 100%;
+    opacity: 0; /* Initially invisible */
+    transform: translateX(100%); /* Slide off-screen */
+    transition: opacity 1s ease, transform 1s ease; /* Smooth transition */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+.page.active {
+    opacity: 1;
+    transform: translateX(0); /* Bring the page into view */
+    z-index: 1;
+}
+
+#predictedCycleLifeTest1,
+#captureVolumeComparisonTest1,
+#captureVolumeComparisonTest2,
+#predictedCycleLifeTest2 {
+    display: none;
+}
+
+.button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.button:hover {
+    background-color: #f7f7f7; /* Light gray */
+    color: #333; /* Dark gray for contrast */
+}
+
+.button-container {
+    margin-top: 30px; /* Increases space between GIF and buttons */
+}
+
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 1000px;
+      width: 100%;
+      color: black;
+      margin: auto;
+    }
+    .learn-more-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .learn-more-text {
+      max-width: 60%;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .learn-more-image img {
+      max-width: 300px;
+      border-radius: 8px;
+    }
+    table {
+    width: 100%; /* Full width within the container */
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed; /* Ensures all columns have equal width */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    color: black;
+    word-wrap: break-word; /* Prevent text overflow */
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+/* General Table Styling */
+table {
+    width: 90%; /* Make the table slightly smaller than the container */
+    max-width: 800px; /* Restrict maximum width */
+    margin: 20px auto; /* Center the table with margin */
+    border-collapse: collapse; /* Remove gaps between table cells */
+    background: #ffffff; /* White background for contrast */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    overflow: hidden; /* Ensure rounded corners affect the entire table */
+}
+
+/* General Dropdown Styling */
+table tbody td select {
+    width: 100%; /* Full width within the table cell */
+    padding: 8px; /* Add padding for better interaction */
+    font-size: 14px; /* Increase font size for readability */
+    color: #333; /* Dark text for better contrast */
+    background: #f9f9f9; /* Light background for a clean look */
+    border: 1px solid #ddd; /* Subtle border to match the table */
+    border-radius: 5px; /* Rounded corners for a modern look */
+    appearance: none; /* Remove the default arrow for custom styling */
+    cursor: pointer; /* Indicate clickable dropdowns */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
+}
+
+/* Dropdown Focus and Hover Effects */
+table tbody td select:focus {
+    outline: none; /* Remove default outline */
+    border-color: #116490; /* Theme color on focus */
+    box-shadow: 0 0 6px rgba(17, 100, 144, 0.5); /* Add glow effect */
+    background: #ffffff; /* Highlight background */
+}
+
+table tbody td select:hover {
+    border-color: #116490; /* Theme color on hover */
+    background: #ffffff; /* Subtle highlight */
+}
+
+/* Dropdown Arrow Styling */
+table tbody td select::-ms-expand {
+    display: none; /* Remove default dropdown arrow in IE */
+}
+
+table tbody td select::after {
+    content: '▼'; /* Custom arrow for dropdowns */
+    position: absolute;
+    right: 10px;
+    pointer-events: none; /* Prevent interference with click */
+}
+
+/* Container for both tables */
+.container {
+    max-width: 1200px; /* Restrict width of the content */
+    margin: 0 auto; /* Center container */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9); /* Subtle transparency */
+    border-radius: 10px; /* Rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+}
+
+/* Body Background */
+body {
+    background-image: url('https://i.postimg.cc/Y0ckbPmN/Graduate-Management-Trainee-1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    color: #ffffff; /* Dark text for readability */
+    margin: 0;
+    padding: 0;
+}
+
+.feedstock-container {
+    margin-top: 20px; /* Adds space between the last section and this box */
+    background: #ffffff; /* White background for contrast */
+    padding: 20px; /* Adds padding inside the container */
+    border-radius: 10px; /* Rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    width: 80%; /* Adjust width to fit within the content area */
+    max-width: 600px; /* Limit the maximum width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Foulant Table Styling */
+#foulantTable {
+    width: 100%; /* Ensure the table fits within the container */
+    border-collapse: collapse; /* Remove gaps between cells */
+    table-layout: fixed; /* Ensure columns are evenly distributed */
+}
+
+#foulantTable th, #foulantTable td {
+    padding: 8px; /* Add padding for readability */
+    text-align: center; /* Center-align all text */
+    border: 1px solid #ddd; /* Light borders between cells */
+    font-size: 14px; /* Uniform font size */
+    color: black; /* Standard text color for readability */
+    word-wrap: break-word; /* Prevent text from overflowing */
+}
+
+#foulantTable th {
+    background-color: #116490; /* Blue header for distinction */
+    color: white; /* Contrast text color */
+    font-weight: bold;
+}
+
+#foulantTable input {
+    width: 90%; /* Keep inputs proportionate */
+    padding: 5px; /* Add padding inside inputs */
+    font-size: 12px; /* Smaller font for compactness */
+    box-sizing: border-box; /* Ensure proper sizing */
+    border: 1px solid #ccc; /* Light border around inputs */
+    border-radius: 4px; /* Rounded input fields */
+}
+
+.feedstock-container {
+    position: fixed; /* Fixes the box in a specific position */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background: #ffffff; /* White background for contrast */
+    padding: 20px; /* Adds padding inside the container */
+    border-radius: 10px; /* Rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    z-index: 1000; /* Ensures it stays on top of other elements */
+    width: 250px; /* Set a fixed width for consistency */
+}
+
+.feedstock-container label {
+    display: block; /* Ensure labels are on separate lines */
+    font-size: 16px;
+    font-weight: bold;
+    color: #116490; /* Consistent theme color */
+    margin-bottom: 8px; /* Add spacing below labels */
+}
+
+/* Styling for the "Select Optimization Strategy" dropdown */
+#page2 #strategySelect {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    cursor: pointer;
+    appearance: none; /* Removes default dropdown arrow */
+}
+
+#page2 #strategySelect:hover,
+#page2 #strategySelect:focus {
+    border-color: #116490;
+    box-shadow: 0 0 6px rgba(17, 100, 144, 0.3);
+    background: #ffffff;
+}
+
+/* Styling for "Enter Reactor Diameter" input */
+#page2 #reactorDiameter {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+}
+
+#page2 #reactorDiameter:hover,
+#page2 #reactorDiameter:focus {
+    border-color: #116490;
+    box-shadow: 0 0 6px rgba(17, 100, 144, 0.3);
+    background: #ffffff;
+}
+
+/* Centering and spacing improvements */
+#page2 div {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#page2 label {
+    color: #444;
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.feedstock-container input {
+    width: 80%; /* Adjust input width to fit container nicely */
+    max-width: 400px; /* Ensure inputs don't get too wide */
+    padding: 12px; /* Add padding for better interaction */
+    font-size: 14px; /* Slightly larger font for readability */
+    color: #333; /* Dark text for contrast */
+    background: #f9f9f9; /* Subtle background color for inputs */
+    border: 1px solid #ddd; /* Light border for inputs */
+    border-radius: 5px; /* Rounded input fields */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+    margin-bottom: 15px; /* Add spacing between inputs */
+    transition: all 0.3s ease-in-out; /* Smooth hover and focus effects */
+}
+
+.feedstock-container input:focus {
+    outline: none;
+    border-color: #116490; /* Blue border on focus */
+    box-shadow: 0 0 8px rgba(17, 100, 144, 0.5); /* Glow effect */
+    background: #ffffff; /* Brighten background on focus */
+}
+
+.feedstock-container button {
+    width: 60%; /* Center and scale the button */
+    max-width: 200px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #116490; /* Theme color */
+    color: white; /* White text for contrast */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.feedstock-container button:hover {
+    background-color: #0c5c78; /* Slightly darker blue on hover */
+    transform: translateY(-3px); /* Subtle lift effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Elevated shadow */
+}
+
+.feedstock-container button:active {
+    transform: translateY(1px); /* Slight press-down effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+    .calculate-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: rgb(16, 100, 146);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .calculate-button:hover {
+      background-color: rgb(12, 80, 120);
+    }
+    .summary {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      color: rgb(16, 100, 146);
+    }
+    .cost-sections {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.cost-section {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cost-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.icon-container img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.cost-section h3 {
+    color: #116490;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.cost-section p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.generate-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #116490;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.generate-button:hover {
+    background-color: #0c5c78;
+}
+
+/* Bubble Effect Styles */
+.bubble-effect {
+    margin: 10px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #116490;
+    opacity: 0;
+    animation: none;
+    display: none;
+}
+
+@keyframes bubbleAnimation {
+    0% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+    100% { opacity: 0.1; transform: scale(1); }
+}
+
+/* Result Styles */
+.cost-result {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #116490;
+}
+
+/* Contact Page Styling */
+#page5 .container {
+    max-width: 700px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: black;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#page5 .container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Contact Heading */
+#page5 h2 {
+    font-size: 2em;
+    color: #116490;
+    margin-bottom: 15px;
+}
+
+/* Contact Form */
+#contactForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Input Fields */
+#contactForm input,
+#contactForm textarea {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#contactForm input:focus,
+#contactForm textarea:focus {
+    border-color: #116490;
+    box-shadow: 0 0 6px rgba(17, 100, 144, 0.3);
+    outline: none;
+}
+
+/* Textarea */
+#contactForm textarea {
+    resize: vertical;
+    height: 120px;
+}
+
+/* Submit Button */
+#contactForm button {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #116490;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#contactForm button:hover {
+    background-color: #0c5c78;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Buttons */
+#page5 .button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+#page5 .button:hover {
+    background-color: #0c5c78;
+    transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #page5 .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    #contactForm input,
+    #contactForm textarea {
+        width: 100%;
+    }
+
+    #contactForm button {
+        width: 100%;
+    }
+}
+
+.innovate-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.innovate-container span {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, text-shadow 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+}
+
+/* INNOVATE - Green Glow */
+.innovate-container .innovate {
+    color: #00ff99;
+    text-shadow: 3px 3px 5px rgba(0, 255, 153, 0.3);
+}
+.innovate-container .innovate:hover {
+    transform: translateY(-3px);
+    text-shadow: 0px 0px 15px rgba(0, 255, 153, 0.8);
+}
+
+/* COLLABORATION - Blue Glow */
+.innovate-container .collaboration {
+    color: #0099ff;
+    text-shadow: 3px 3px 5px rgba(0, 153, 255, 0.3);
+}
+.innovate-container .collaboration:hover {
+    transform: translateY(-3px);
+    text-shadow: 0px 0px 15px rgba(0, 153, 255, 0.8);
+}
+
+/* ROI FOCUSED - Gold Glow */
+.innovate-container .roi-focused {
+    color: #ffcc00;
+    text-shadow: 3px 3px 5px rgba(255, 204, 0, 0.3);
+}
+.innovate-container .roi-focused:hover {
+    transform: translateY(-3px);
+    text-shadow: 0px 0px 15px rgba(255, 204, 0, 0.8);
+}
+h1 {
+    font-size: 36px; /* Increase font size */
+    font-weight: bold;
+    text-transform: uppercase; /* Optional: Makes text all caps */
+    letter-spacing: 1.5px; /* Improves readability */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
+    color: #f7f7f7; /* Ensures it contrasts well on dark backgrounds */
+}
+h3 {
+    font-size: 24px; /* Slightly smaller than the main title */
+    font-weight: 600; /* Medium-bold for distinction */
+    text-transform: uppercase; /* Ensures consistent capitalization */
+    letter-spacing: 1.5px; /* Same spacing as the title */
+    color: #f7f7f7; /* Consistent theme */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); /* Lighter shadow than the main title */
+    margin-top: -5px; /* Keeps subtitle close but distinct */
+}
+
+/* Style Loading Comparison Header to Match "Learn More About AFS" */
+#page2 h2 {
+    text-align: center;
+    font-size: 1.5em; /* Match size with AFS title */
+    color: rgb(16, 100, 146); /* Consistent blue shade */
+    text-transform: uppercase; /* Optional: Makes it stand out */
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
+    margin-bottom: 20px; /* Add some spacing */
+}
+
+/* Style Contact Us Header to Match "Learn More About AFS" */
+#page5 h2 {
+    text-align: center;
+    font-size: 1.5em; /* Match size with AFS title */
+    color: rgb(16, 100, 146); /* Consistent blue shade */
+    text-transform: uppercase; /* Optional: Makes it stand out */
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
+    margin-bottom: 20px; /* Add some spacing */
+}
+
+/* General Title Styling (Matches "Learn More About AFS") */
+#page4 h2 {
+    text-align: center;
+    font-size: 1.2em; /* Standard title size */
+    color: rgb(16, 100, 146);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+}
+
+/* 🔵 Your Personalized AFS Optimized Load - More Bold & Subtly Stronger */
+#test1 h2 {
+    color: rgb(16, 100, 146); /* AFS Blue */
+    font-size: 1.2em; /* Keep it uniform */
+    text-transform: uppercase;
+    font-weight: 700; /* Slightly lighter than Personalized AFS */
+    letter-spacing: 1.3px;
+    text-shadow: 2px 2px 6px rgba(0, 153, 255, 0.3); /* Subtle glow effect */
+    border-bottom: 5px solid #116490;
+    padding-bottom: 8px;
+
+}
+
+/* 🔷 Alternative AFS Load - Standard Boldness */
+#test2 h2 {
+    color: rgb(16, 100, 146);
+    font-size: 1.2em; /* Same as other titles */
+    text-transform: uppercase;
+    font-weight: 700; /* Slightly lighter than Personalized AFS */
+    letter-spacing: 1.2px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+    border-bottom: 2px dashed #116490; /* Dashed underline for subtle differentiation */
+    padding-bottom: 6px;
+}
+
+
+  </style>
+</head>
+<body>
+   
+    <div id="page1" class="page active">
+        <!-- Main Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            
+            <!-- Logo Section -->
+            <div style="position: absolute; top: 20px; right: 20px;">
+                <img src="UNICAT Catalyst Tech LLC WHITE Logo Large.png" 
+                     alt="UNICAT Catalyst Tech Logo" 
+                     style="height: 120px;">
+            </div>
+    
+            <h1>Welcome to the Graded Bed Selection Tool</h1>
+            <h3>Find out your personalised AFS load</h3>
+    
+            <!-- YouTube Video Embed -->
+            <div style="margin: 30px auto; width: 100%; max-width: 640px; box-shadow: 0 4px 10px rgba(243, 243, 243, 0.3); border-radius: 8px; overflow: hidden;">
+                <iframe 
+                    width="100%" 
+                    height="405" 
+                    src="https://www.youtube.com/embed/cylFPCndjqk" 
+                    title="AFS Video"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+    
+            <!-- INNOVATIVE Banner (Remains Above) -->
+            <div class="innovate-container">
+                INNOVATIVE | COLLABORATIVE | ROI-FOCUSED
+            </div>
+    
+            <!-- Text & Flag Section (Now Side by Side & Centered) -->
+            <div style="display: flex; align-items: center; justify-content: center; max-width: 700px; margin-top: 20px;">
+                <!-- Text Section (Now Centered with Spacing) -->
+                <div style="max-width: 400px; padding-right: 20px; font-size: 14px; line-height: 2; text-align: center;">
+                    We are an innovative catalyst and process technology partner that collaborates 
+                    with businesses to find effective solutions to increase efficiency and sustainability. 
+                    Our technical expertise is demonstrated through high-quality, award-winning 
+                    solutions and continuous investment in product development.
+                </div>
+    
+                <!-- Flag Section -->
+                <div>
+                    <img src="usa.gif" 
+                         alt="US Flag GIF" 
+                         width="200">
+                </div>
+            </div>
+    
+            <!-- Buttons (Remain in Same Place) -->
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="navigateToPage('page2')">Get Started</button>
+                <button class="button" onclick="navigateToPage('page3')">Learn More About AFS</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+  
+    <div id="page2" class="page">
+        <div class="container">
+            <h2>Loading Comparison</h2>
+    
+            <!-- Selection Container -->
+            <div class="selection-container">
+                <div>
+                    <label for="strategySelect">Select Optimization Strategy:</label>
+                    <select id="strategySelect">
+                        <option value="maximizeEnergy">Maximize Catalytic Energy</option>
+                        <option value="increaseCycleLife">Increase Cycle Life</option>
+                    </select>
+                </div>
+    
+                <div>
+                    <label for="reactorDiameter">Enter Reactor Diameter (in feet):</label>
+                    <input 
+                        type="number" 
+                        id="reactorDiameter" 
+                        placeholder="Diameter in feet"
+                        oninput="loadCatalystData()"  
+                    />
+                </div>
+            </div>
+    
+            <h4>Current As Loaded</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Catalyst Layer</th>
+                        <th>Catalyst Type</th>
+                        <th>Height (in)</th>
+                        <th>Loaded Volume (ft³)</th>
+                        <th>Capture Volume (ft³)</th>
+                    </tr>
+                </thead>
+                <tbody id="currentLoadedTable"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Sum</td>
+                        <td id="currentLoadedSum">0.00</td>
+                        <td id="currentCaptureSum">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+    
+            <!-- Calculate Button -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="handleCalculateAndNavigate()">Calculate</button>
+            </div>
+        </div>
+    </div>
+    
+    
+
+      <div id="page3" class="page">
+        <div class="container">
+          <h1 style="text-align: center; font-size: 2.5em; color: rgb(16, 100, 146);">Learn More About AFS</h1>
+          
+          <!-- AFS Section -->
+          <div class="learn-more-content" style="background: linear-gradient(135deg, #f4f4f4, #e8e8e8); border-radius: 10px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="learn-more-text" style="flex: 1; margin-right: 20px;">
+              <h3 style="color: rgb(16, 100, 146);">AFS 2.0</h3>
+              <p>The Next Generation of AFS has improvements in geometry. Shape and design have evolved along with a deeper understanding of dynamics which influence filter capacity and pressure drop.</p>
+              <p>These disks have been designed and optimized to mitigate pressure drop problems due to the build-up of various foulants in the grading and top catalyst layers of hydrotreating reactors and other fixed bed units.</p>
+              <p>UNICAT AFS Series is a licensed technology. AFS grading solutions have been successfully installed in more than 500 applications.</p>
+              <h4 style="color: rgb(16, 100, 146);">Advantages of AFS:</h4>
+              <ul>
+                <li>50%+ longer cycle length than reticulated products, due to having larger and 100% accessible void space for foulant capture and storage.</li>
+                <li>Best option for capturing any size particulate.</li>
+                <li>Easily doubles the run life of traditional grading in dP limited vessels.</li>
+                <li>3x stronger than reticulated products.</li>
+              </ul>
+              <h4 style="color: rgb(16, 100, 146);">AFS Unique Features:</h4>
+              <ul>
+                <li>Available in promoted type for mild HDS hydrogenation, silica removal, and demetalization.</li>
+                <li>High crush and physical strength provides minimal dusting and breakage during loading and unloading (3x stronger than reticulated disk).</li>
+                <li>Available from 10 mesh to 50 mesh filter patterns in most sizes, providing exceptional flexibility in design.</li>
+                <li>Available with active surface area exceeding 60 m²/g to 110 m²/g, so it can be used as a catalyst substrate while maintaining filtration capability.</li>
+                <li>Well-suited for high-pressure applications such as CFH, GOHT, and HCU reactors, as well as less severe applications such as NHT and DHT.</li>
+              </ul>
+            </div>
+            <div class="learn-more-image" style="flex: 0.8;">
+                <img src="NEXT GEN.jpg" alt="Next Gen AFS Logo" 
+                style="width: 100%; max-width: 300px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+           
+            </div>
+          </div>
+          
+          <!-- MagAFS Section -->
+          <div class="learn-more-content" style="background: linear-gradient(135deg, #e8f4ff, #cce4ff); border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="learn-more-text" style="flex: 1; margin-right: 20px;">
+              <h4 style="color: rgb(16, 100, 146);">MagAFS: The Advanced Magnetic Nano-Particle Filtration System</h4>
+              <p>UNICAT is excited to introduce MagAFS, our latest innovation in Advanced Filtration System (AFS) technology. MagAFS is designed to remove nano particles in advance of the catalyst bed by applying a patented unique design and external magnetic field to flowing gas and liquid streams to remove ferromagnetic, paramagnetic, and diamagnetic solids and particles.</p>
+              <h5 style="color: rgb(16, 100, 146);">Benefits of MagAFS:</h5>
+              <ul>
+                <li>Longer Catalyst Cycle Lengths</li>
+                <li>Advanced Nano-Particle Removal</li>
+                <li>Superior Filtration Efficiency</li>
+                <li>Enhanced Operational Life</li>
+                <li>Cost Savings</li>
+                <li>Versatile Applications</li>
+                <li>Improved Circulating Solvent Systems</li>
+              </ul>
+            </div>
+           
+            <div class="learn-more-image" style="flex: 0.8;">
+                <img src="unicat-mag-afs-web-image.jpg" 
+                style="width: 100%; max-width: 300px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-left: -20px;">           
+              </div>
+            </div>
+  
+         
+        
+          <!-- Navigation Buttons -->
+          <div style="text-align: center; margin-top: 30px;">
+            <button class="button" onclick="navigateToPage('page1')">Back to Welcome</button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div id="page4" class="page">
+        <div class="container">
+    
+            <!-- AFS Optimized Load Section -->
+            <div id="afsOptimizedLoad">
+                <h2>AFS Optimized Load</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catalyst Layer</th>
+                            <th>Catalyst Type</th>
+                            <th>Height (in)</th>
+                            <th>Loaded Volume (ft³)</th>
+                            <th>Capture Volume (ft³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparisonLoadingTable"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Sum</td>
+                            <td id="comparisonLoadedSum">0.00</td>
+                            <td id="comparisonCaptureSum">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+    
+                <!-- Results Section for AFS -->
+                <div class="summary" style="margin-top: 30px;">
+                    <p><strong>Capture Volume Comparison:</strong> <span id="captureVolumeComparison">0%</span></p>
+                    <p><strong>Predicted Cycle Life:</strong> <span id="predictedCycleLife">0.00 Years</span></p>
+                </div> 
+            </div> <!-- End of AFS Optimized Load -->
+    
+            <!-- TEST 1 Section -->
+            <div id="test1">
+                <h2>TEST 1 - Adjusted Catalyst Table</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catalyst Layer</th>
+                            <th>Catalyst Type</th>
+                            <th>Height (in)</th>
+                            <th>Loaded Volume (ft³)</th>
+                            <th>Capture Volume (ft³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="test1Table"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Sum</td>
+                            <td id="test1LoadedSum">0.00</td>
+                            <td id="test1CaptureSum">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+   <!-- Summary for Test 1 -->
+  <!-- Summary for Test 1 -->
+<div class="summary" style="margin-top: 30px;">
+    <p><strong>Capture Volume Comparison: 150.00%</strong> <span id="captureVolumeComparisonTest1">0%</span></p>
+    <p><strong>Predicted Cycle Life: 1.50 years</strong> <span id="predictedCycleLifeTest1">0.00 Years</span></p>
+    <p style="color: red; font-weight: bold;">Generating a 33% Cost Savings</p>
+</div>
+
+</div> <!-- End of TEST 1 -->
+
+            <!-- TEST 2 Section -->
+            <div id="test2">
+                <h2>TEST 2 - Exact Capture Volume Match</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catalyst Layer</th>
+                            <th>Catalyst Type</th>
+                            <th>Height (in)</th>
+                            <th>Loaded Volume (ft³)</th>
+                            <th>Capture Volume (ft³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exactMatchTable"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Sum</td>
+                            <td id="exactMatchLoadedSum">0.00</td>
+                            <td id="exactMatchCaptureSum">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+    
+                <!-- Summary for Test 2 -->
+                <div class="summary" style="margin-top: 30px;">
+                    <p><strong>Capture Volume Comparison: 100.00%</strong> <span id="captureVolumeComparisonTest2">0%</span></p>
+                    <p><strong>Predicted Cycle Life: 1.00 years</strong> <span id="predictedCycleLifeTest2">0.00 Years</span></p>
+                </div>
+            </div> <!-- End of TEST 2 -->
+    
+            <!-- Navigation Buttons -->
+            <button class="button" onclick="navigateToPage('page2')">Back to Comparison</button>
+            <button class="button" onclick="navigateToPage('page5')">Contact Us</button>
+    
+        </div> <!-- End of Container -->
+    </div> <!-- End of Page 4 -->
+    
+    
+    <div id="page5" class="page">
+        <div class="container">
+            <h2>Contact Us for More Information</h2>
+            <p id="pressureDrop" style="font-size: 1.5em;"></p>
+    
+            <!-- Contact Form for Web3Forms Submission -->
+            <div style="margin-top: 30px; padding: 20px; background: white; border-radius: 8px; text-align: center;">
+                <p>Fill out the form below, and we’ll get back to you.</p>
+    
+                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <!-- Web3Forms Access Key -->
+                    <input type="hidden" name="access_key" value="a3e021c8-29f4-4ab8-92d5-65912cda5071">
+                    
+                    <label for="fullName" style="display: block; margin-top: 10px;">Full Name:</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="fullName" 
+                        placeholder="Your Full Name" 
+                        required 
+                        style="width: 100%; padding: 10px; margin-top: 5px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px;">
+    
+                    <label for="position" style="display: block; margin-top: 10px;">Position:</label>
+                    <input 
+                        type="text" 
+                        name="position" 
+                        id="position" 
+                        placeholder="Your Position" 
+                        required
+                        style="width: 100%; padding: 10px; margin-top: 5px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px;">
+    
+                    <label for="contactEmail" style="display: block; margin-top: 10px;">Email Address:</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="contactEmail" 
+                        placeholder="Your Email Address" 
+                        required 
+                        style="width: 100%; padding: 10px; margin-top: 5px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px;">
+    
+                    <label for="comments" style="display: block; margin-top: 10px;">Comments:</label>
+                    <textarea 
+                        name="message" 
+                        id="comments" 
+                        placeholder="Your Message or Questions" 
+                        rows="4" 
+                        required 
+                        style="width: 100%; padding: 10px; margin-top: 5px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px;">
+                    </textarea>
+    
+                    <button 
+                        type="submit" 
+                        class="button" 
+                        style="margin-top: 20px; width: 100%; background-color: #116490; color: white;">
+                        Submit
+                    </button>
+                </form>
+            </div>
+    
+            <!-- Navigation Buttons -->
+            <button class="button" onclick="navigateToPage('page4')">Back to AFS Optimized Load</button>
+            <button class="button" onclick="navigateToPage('page1')">Back to Welcome</button>
+        </div>
+    </div>
+    
+
+    
+
+      <script>
+        const currentCatalystOptions = ["AFS-4525", "AFS-4550", "AFS-3325", "AFS-3350", "AFS-2525", "6.4mm Ring", "4.8mm Ring", "3.2mm Ring"];
+        const comparisonCatalystOptions = ["AFS-4510", "AFS-4525", "AFS-4550", "8.0mm Ring", "4.8mm Ring", "3.2mm Ring"];
+    
+        const catalystData = {
+    "AFS-4510": { cvFactor: 0.28 },
+    "AFS-4525": { cvFactor: 0.21 },
+    "AFS-4550": { cvFactor: 0.16 },
+    "AFS-3310": { cvFactor: 0.27 },
+    "AFS-3325": { cvFactor: 0.19 },
+    "AFS-3350": { cvFactor: 0.15 },
+    "AFS-2510": { cvFactor: 0.25 },
+    "AFS-2525": { cvFactor: 0.18 },
+    "AFS-2550": { cvFactor: 0.14 },
+    "AFS-1910": { cvFactor: 0.23 },
+    "AFS-1925": { cvFactor: 0.17 },
+    "AFS-1950": { cvFactor: 0.13 },
+    "10 Series Reticulated Foam": { cvFactor: 0.26 },
+    "30 Series Reticulated Foam": { cvFactor: 0.26 },
+    "50 Series Reticulated Foam": { cvFactor: 0.09 },
+    "65 Series Reticulated Foam": { cvFactor: 0.09 },
+    "80 Series Reticulated Foam": { cvFactor: 0.08 },
+    "100 Series Reticulated Foam": { cvFactor: 0.09 },
+    "Wagon Wheel": { cvFactor: 0.13 },
+    "8.0mm Ring": { cvFactor: 0.10 },
+    "6.4mm Ring": { cvFactor: 0.09 },
+    "4.8mm Ring": { cvFactor: 0.09 },
+    "3.2mm Ring": { cvFactor: 0.08 },
+};
+
+    
+        const currentCatalystLayers = [
+            { layer: 1, height: 8.0, defaultType: "AFS-4525" },
+            { layer: 2, height: 8.0, defaultType: "AFS-4550" },
+            { layer: 3, height: 24.0, defaultType: "AFS-3325" },
+            { layer: 4, height: 24.0, defaultType: "AFS-3350" },
+            { layer: 5, height: 21.0, defaultType: "AFS-2525" },
+            { layer: 6, height: 21.0, defaultType: "6.4mm Ring" },
+            { layer: 7, height: 22.0, defaultType: "4.8mm Ring" },
+            { layer: 8, height: 10.0, defaultType: "3.2mm Ring" },
+            { layer: 9, height: 6.0, defaultType: "AFS-4550" },
+            { layer: 10, height: 6.0, defaultType: "AFS-3325" },
+            { layer: 11, height: 6.0, defaultType: "AFS-3350" },
+            { layer: 12, height: 3.0, defaultType: "AFS-2525" }
+        ];
+    
+        const comparisonCatalystLayers = [
+            { layer: 1, height: 8.0, defaultType: "AFS-4510" },
+            { layer: 2, height: 67.0, defaultType: "AFS-4525" },
+            { layer: 3, height: 63.0, defaultType: "AFS-4550" },
+            { layer: 4, height: 6.0, defaultType: "8.0mm Ring" },
+            { layer: 5, height: 6.0, defaultType: "4.8mm Ring" },
+            { layer: 6, height: 9.0, defaultType: "3.2mm Ring" }
+        ];
+    
+        function initializeTables() {
+            populateTable("currentLoadedTable", currentCatalystLayers, catalystData);
+            populateTable("comparisonLoadingTable", comparisonCatalystLayers, catalystData);
+            calculateSums();
+        }
+    
+        function populateTable(tableId, catalystLayers, catalystData, isStatic = false) {
+        const table = document.getElementById(tableId);
+        table.innerHTML = ""; // Clear the table before populating
+    
+        catalystLayers.forEach((layerData, index) => {
+            const row = document.createElement("tr");
+            let optionsHTML = Object.keys(catalystData)
+                .map(type => `<option value="${type}" ${type === layerData.defaultType ? "selected" : ""}>${type}</option>`)
+                .join("");
+    
+            if (!isStatic) {
+                optionsHTML = `<option value="">Empty</option>` + optionsHTML;
+            }
+
+            document.getElementById("reactorDiameter").addEventListener("input", () => {
+    document.querySelectorAll("#currentLoadedTable tr").forEach((row) => {
+        const height = parseFloat(row.querySelector(".layer-height").value) || 0;
+        updateRow(row, height); // Recalculate LV for all rows
+    });
+});
+
+    
+            row.innerHTML = `
+                <td>${layerData.layer}</td>
+                <td>
+                    <select class="catalyst-type" data-index="${index}">
+                        ${optionsHTML}
+                    </select>
+                </td>
+                <td>
+                    <input 
+                        type="number" 
+                        class="layer-height" 
+                        value="${layerData.height.toFixed(2)}" 
+                        step="0.1" 
+                        style="width: 60px; text-align: right;" 
+                    />
+                </td>
+                <td class="loaded-volume"></td>
+                <td class="capture-volume"></td>
+            `;
+    
+            table.appendChild(row);
+    
+            row.querySelector(".layer-height").addEventListener("input", (event) => {
+    const newHeight = parseFloat(event.target.value) || 0;
+    updateRow(row, newHeight); // Trigger recalculation
+});
+
+    
+row.querySelector(".catalyst-type").addEventListener("change", (event) => {
+    const newHeight = parseFloat(row.querySelector(".layer-height").value) || 0;
+    updateRow(row, newHeight); // Trigger recalculation
+});
+
+    
+            // Initialize row values
+            updateRow(row, layerData.defaultType, layerData.height, catalystData);
+        });
+    }
+    
+    function loadCatalystData() {
+        const diameter = parseFloat(document.getElementById('reactorDiameter').value);
+        if (isNaN(diameter)) {
+            alert("Please enter a valid diameter.");
+            return;
+        }
+    
+        // Determine which catalyst layers to use for comparison based on the diameter
+        const comparisonCatalystLayers = diameter >= 5.0 ? [
+            { layer: 1, height: 8.0, defaultType: "AFS-4525" },
+            { layer: 2, height: 67.0, defaultType: "AFS-4550" },
+            { layer: 3, height: 63.0, defaultType: "AFS-4510" },
+            { layer: 4, height: 6.0, defaultType: "6.4mm Ring" },
+            { layer: 5, height: 6.0, defaultType: "4.8mm Ring" },
+            { layer: 6, height: 9.0, defaultType: "3.2mm Ring" }
+        ] : [
+            { layer: 1, height: 8.0, defaultType: "AFS-3325" },
+            { layer: 2, height: 67.0, defaultType: "AFS-3350" },
+            { layer: 3, height: 63.0, defaultType: "AFS-2525" },
+            { layer: 4, height: 6.0, defaultType: "6.4mm Ring" },
+            { layer: 5, height: 6.0, defaultType: "4.8mm Ring" },
+            { layer: 6, height: 9.0, defaultType: "3.2mm Ring" }
+        ];
+    
+        // Populate the comparison loading table without allowing dynamic changes
+        populateTable("comparisonLoadingTable", comparisonCatalystLayers, catalystData, true);
+    }
+    
+    function handleLogin(event) {
+        event.preventDefault(); // Prevent form submission
+    
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+    
+        // Example validation (replace with real logic if needed)
+        if (email && password) {
+            alert("Login successful!");
+            navigateToPage("page1"); // Show the first page
+        } else {
+            alert("Please enter valid credentials.");
+        }
+    }
+    
+    function updateRow(row) {
+    const diameter = parseFloat(document.getElementById("reactorDiameter").value) || 0;
+    const radius = diameter / 2;
+    
+    const selectElement = row.querySelector(".catalyst-type");
+    const selectedType = selectElement.value;
+    const heightInput = row.querySelector(".layer-height");
+    
+    let height = parseFloat(heightInput.value) || 0;
+    let lv = 0; // Loaded Volume
+    let cv = 0; // Capture Volume
+
+    // If "Empty" is selected, set height, LV, and CV to 0
+    if (selectedType === "") {
+        height = 0;
+        heightInput.value = 0; // Force height to be zero
+    }
+
+    // Calculate Loaded Volume (LV) only if diameter is provided
+    if (diameter > 0) {
+        lv = Math.PI * Math.pow(radius, 2) * (height / 12); // Height converted to feet
+    }
+
+    // Get capture volume factor and calculate CV
+    const cvFactor = catalystData[selectedType]?.cvFactor || 0;
+    cv = lv * cvFactor;
+
+    // Update table cells
+    row.querySelector(".loaded-volume").textContent = lv.toFixed(5);
+    row.querySelector(".capture-volume").textContent = cv.toFixed(5);
+
+    // Update total sums
+    calculateSums();
+}
+
+    
+function calculateSums() {
+    function calculateTableSum(tableId, loadedSumId, captureSumId) {
+        let totalLV = 0; // Total Loaded Volume
+        let totalCV = 0; // Total Capture Volume
+
+        document.querySelectorAll(`#${tableId} tr`).forEach((row) => {
+            totalLV += parseFloat(row.querySelector(".loaded-volume").textContent) || 0;
+            totalCV += parseFloat(row.querySelector(".capture-volume").textContent) || 0;
+        });
+
+        document.getElementById(loadedSumId).textContent = totalLV.toFixed(2);
+        document.getElementById(captureSumId).textContent = totalCV.toFixed(2);
+    }
+
+    // Update both tables
+    calculateTableSum("currentLoadedTable", "currentLoadedSum", "currentCaptureSum");
+    calculateTableSum("comparisonLoadingTable", "comparisonLoadedSum", "comparisonCaptureSum");
+}
+
+function calculateSummary() {
+    const currentCaptureSum = parseFloat(document.getElementById("currentCaptureSum").textContent) || 0;
+    const comparisonCaptureSum = parseFloat(document.getElementById("comparisonCaptureSum").textContent) || 0;
+    const test1CaptureSum = parseFloat(document.getElementById("test1CaptureSum").textContent) || 0;
+    const exactMatchCaptureSum = parseFloat(document.getElementById("exactMatchCaptureSum").textContent) || 0;
+
+    console.log("Current Capture Sum:", currentCaptureSum);
+    console.log("Comparison Capture Sum:", comparisonCaptureSum);
+    console.log("Test 1 Capture Sum:", test1CaptureSum);
+    console.log("Exact Match Capture Sum:", exactMatchCaptureSum);
+
+    // Calculate Capture Volume Comparisons
+    const captureVolumeComparison = currentCaptureSum > 0 ? (comparisonCaptureSum / currentCaptureSum) * 100 : 0;
+    const captureVolumeComparisonTest1 = currentCaptureSum > 0 ? (test1CaptureSum / currentCaptureSum) * 100 : 0;
+    const captureVolumeComparisonTest2 = currentCaptureSum > 0 ? (exactMatchCaptureSum / currentCaptureSum) * 100 : 0;
+
+    // Calculate Predicted Cycle Life
+    const predictedCycleLife = currentCaptureSum > 0 ? comparisonCaptureSum / currentCaptureSum : 0;
+    const predictedCycleLifeTest1 = currentCaptureSum > 0 ? test1CaptureSum / currentCaptureSum : 0;
+    const predictedCycleLifeTest2 = currentCaptureSum > 0 ? exactMatchCaptureSum / currentCaptureSum : 0;
+
+    // Update AFS Optimized Load summary
+    document.getElementById("captureVolumeComparison").textContent = `${captureVolumeComparison.toFixed(2)}%`;
+    document.getElementById("predictedCycleLife").textContent = `${predictedCycleLife.toFixed(2)} Years`;
+
+    // Update Test 1 and Test 2 summary
+    document.getElementById("captureVolumeComparisonTest1").textContent = `${captureVolumeComparisonTest1.toFixed(2)}%`;
+    document.getElementById("predictedCycleLifeTest1").textContent = `${predictedCycleLifeTest1.toFixed(2)} Years`;
+
+    document.getElementById("captureVolumeComparisonTest2").textContent = `${captureVolumeComparisonTest2.toFixed(2)}%`;
+    document.getElementById("predictedCycleLifeTest2").textContent = `${predictedCycleLifeTest2.toFixed(2)} Years`;
+}
+
+    
+        document.addEventListener("DOMContentLoaded", initializeTables);
+    
+        function navigateToPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function handleCalculateAndNavigate() {
+    // Get user-selected strategy from Page 2
+    const strategy = document.getElementById("strategySelect").value;
+    const reactorDiameterInput = document.getElementById("reactorDiameter");
+    const reactorDiameter = parseFloat(reactorDiameterInput.value);
+
+    // Validation: Ensure both fields are filled
+    if (!strategy) {
+        alert("Please select an optimization strategy before proceeding.");
+        return;
+    }
+
+    if (isNaN(reactorDiameter) || reactorDiameter <= 0) {
+        alert("Please enter a valid reactor diameter (greater than 0) before proceeding.");
+        reactorDiameterInput.focus(); // Set focus on the input field
+        return;
+    }
+
+    // Perform calculations before navigating
+    calculateSummary();
+    generateTest1Table();
+    generateExactMatchTable();
+    updateLoadedVolumeDifference();
+
+    // Identify which test table to prioritize
+    const test1Div = document.getElementById("test1");
+    const test2Div = document.getElementById("test2");
+    const page4Container = document.getElementById("page4").querySelector(".container");
+
+    // Assign labels dynamically
+    let personalizedTable, alternativeTable;
+    if (strategy === "maximizeEnergy") {
+        personalizedTable = test2Div;
+        alternativeTable = test1Div;
+    } else {
+        personalizedTable = test1Div;
+        alternativeTable = test2Div;
+    }
+
+    // Move the personalized solution table to the top
+    page4Container.insertBefore(personalizedTable, page4Container.firstChild);
+
+    // Apply styling for the selected table (Personalized)
+    personalizedTable.style.fontSize = "1.3em";  // Make text bigger
+    personalizedTable.style.border = "3px solid #116490";  // Highlight border
+    personalizedTable.style.padding = "20px";  // Add more padding
+    personalizedTable.style.boxShadow = "0 6px 15px rgba(0, 0, 0, 0.2)";  // Make it stand out
+    personalizedTable.querySelector("h2").textContent = "Your Personalized AFS Optimized Load";
+
+    // Apply styling for the alternative table
+    alternativeTable.style.fontSize = "1.1em";  // Slightly bigger than normal but not as large
+    alternativeTable.style.border = "2px dashed #999";  // Dashed border to differentiate
+    alternativeTable.style.padding = "15px";  // Less padding than the main one
+    alternativeTable.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.1)";  // Subtle shadow
+    alternativeTable.querySelector("h2").textContent = "Alternative AFS Load";
+
+    // Navigate to Page 4
+    navigateToPage("page4");
+}
+
+
+function calculatePressureDrop() {
+    // Example calculation logic for pressure drop
+    const feedRate = parseFloat(document.getElementById('feedRate').value);
+    const density = parseFloat(document.getElementById('density').value);
+
+    // Placeholder calculation
+    const pressureDrop = feedRate && density ? (feedRate * density * 0.1).toFixed(2) : 0;
+
+    // Update the Pressure Drop result
+    document.getElementById('pressureDropResult').textContent = `Calculated Pressure Drop: ${pressureDrop} psi`;
+
+    // Navigate to Pressure Drop Page
+    navigateToPage('page6');
+}
+
+// Function to get the updated densities
+function getFoulantDensities() {
+  const densities = [];
+  document.querySelectorAll(".foulant-density").forEach((input, index) => {
+    const value = parseFloat(input.value);
+    densities.push({ foulant: `Foulant ${index + 1}`, density: value });
+  });
+  console.log(densities); // Replace with your logic to use this data
+}
+
+// Example: Add an event listener to log changes
+document.querySelectorAll(".foulant-density").forEach(input => {
+  input.addEventListener("change", getFoulantDensities);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const foulantInputs = [
+        document.getElementById("foulant1"),
+        document.getElementById("foulant2"),
+        document.getElementById("foulant3"),
+        document.getElementById("foulant4"),
+        document.getElementById("foulant5")
+    ];
+    const densities = [45.2, 93.3, 1411, 302.2, 144.8];
+    const totalSplitSpan = document.getElementById("totalSplit");
+    const calculateBtn = document.getElementById("calculateBtn");
+
+    const normalFoulantConcentration = document.getElementById("normalFoulantConcentration");
+    const normalOverallFoulant = document.getElementById("normalOverallFoulant");
+    const worstCaseOverallFoulant = document.getElementById("worstCaseOverallFoulant");
+    const worstCaseDays = document.getElementById("worstCaseDays");
+
+    calculateBtn.disabled = true;
+
+    // Update the total split and enable/disable the calculate button
+    foulantInputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+            const total = foulantInputs.reduce((sum, input) => sum + (parseFloat(input.value) || 0), 0);
+            totalSplitSpan.textContent = total.toFixed(2);
+
+            calculateBtn.disabled = total !== 100;
+        });
+    });
+
+    // Calculate and display results
+    calculateBtn.addEventListener("click", () => {
+        if (parseFloat(totalSplitSpan.textContent) !== 100) {
+            alert("The total split must equal 100% to proceed.");
+            return;
+        }
+
+        const feedRate = parseFloat(document.getElementById("feedRate").value) || 0;
+        const density = parseFloat(document.getElementById("density").value) || 0;
+
+        if (feedRate === 0 || density === 0) {
+            alert("Please enter valid Feed Rate and Density values.");
+            return;
+        }
+
+        // Calculate normal foulant concentration and overall foulant
+        const foulantConcentration = foulantInputs.reduce((sum, input, i) => {
+            const percentage = parseFloat(input.value) || 0;
+            return sum + (percentage / 100) * densities[i];
+        }, 0);
+
+        const overallFoulantNormal = foulantConcentration * feedRate * density;
+        const worstCaseFoulant = overallFoulantNormal * 1.5; // Assume worst case is 1.5 times normal
+
+        // Update results
+        normalFoulantConcentration.textContent = foulantConcentration.toFixed(2);
+        normalOverallFoulant.textContent = overallFoulantNormal.toFixed(2);
+        worstCaseOverallFoulant.textContent = worstCaseFoulant.toFixed(2);
+
+        const daysInYear = 365; // Number of days in a year
+        worstCaseDays.textContent = daysInYear; // Assuming worst-case scenario happens all year
+    });
+});
+
+function generateTest1Table() {
+    const reactorDiameter = parseFloat(document.getElementById("reactorDiameter").value) || 0;
+
+    // Get the current total capture volume
+    const currentCaptureSum = parseFloat(document.getElementById("currentCaptureSum").textContent) || 0;
+    
+    // Get fixed capture volumes for layers 4 and 5 (since they don't change)
+    const fixedLayer4CV = 0.17; // Manually define the known capture volume
+    const fixedLayer5CV = 0.16;
+
+    // Compute the exact target sum for capture volume (50% increase)
+    const targetCaptureSum = currentCaptureSum * 1.5;
+
+    // Compute the required capture sum from layers 1-3
+    const requiredCaptureSum = targetCaptureSum - (fixedLayer4CV + fixedLayer5CV);
+
+    // Catalyst selection based on reactor size
+    const catalystOptionsAbove5ft = ["AFS-4525", "AFS-4550", "AFS-4510"];
+    const catalystOptionsBelow5ft = ["AFS-3325", "AFS-3350", "AFS-3310"];
+    const selectedCatalysts = reactorDiameter >= 5 ? catalystOptionsAbove5ft : catalystOptionsBelow5ft;
+
+    // Fixed catalyst layers (4 and 5) -> Rings
+    const ringCatalysts = [
+        { layer: 4, type: "6.4mm Ring", height: 3, captureVolume: fixedLayer4CV },
+        { layer: 5, type: "4.8mm Ring", height: 3, captureVolume: fixedLayer5CV }
+    ];
+
+    // Clear previous table
+    const table = document.getElementById("test1Table");
+    table.innerHTML = "";
+
+    let totalLoadedVolume = 0;
+    let totalCaptureVolume = fixedLayer4CV + fixedLayer5CV; // Start with fixed layers included
+    let rowsData = [];
+
+    // Base heights for layers 1-3
+    let baseHeights = [12, 14, 16];
+
+    // Generate adjustable layers (Layers 1-3)
+    for (let i = 0; i < 3; i++) {
+        const catalystType = selectedCatalysts[i];
+        let height = baseHeights[i];
+        let loadedVolume = (height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12;
+        let captureVolume = loadedVolume * (catalystData[catalystType]?.cvFactor || 0);
+
+        rowsData.push({
+            layer: i + 1,
+            catalystType,
+            height,
+            loadedVolume,
+            captureVolume
+        });
+
+        totalLoadedVolume += loadedVolume;
+        totalCaptureVolume += captureVolume;
+    }
+
+    // Add fixed catalyst layers 4 and 5 (Rings)
+    ringCatalysts.forEach((ring) => {
+        const loadedVolume = (ring.height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12;
+        rowsData.push({
+            layer: ring.layer,
+            catalystType: ring.type,
+            height: ring.height,
+            loadedVolume,
+            captureVolume: ring.captureVolume
+        });
+
+        totalLoadedVolume += loadedVolume;
+    });
+
+    // **Adjustment: Modify only Layers 1-3 to reach the exact 50% increase**
+    let adjustableCaptureVolume = totalCaptureVolume - (fixedLayer4CV + fixedLayer5CV);
+    let adjustmentFactor = requiredCaptureSum / adjustableCaptureVolume;
+
+    // Apply the adjustment factor
+    for (let i = 0; i < 3; i++) {
+        rowsData[i].height *= adjustmentFactor; // Adjust heights
+        rowsData[i].loadedVolume = (rowsData[i].height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12; // Recalculate LV
+        rowsData[i].captureVolume = rowsData[i].loadedVolume * (catalystData[rowsData[i].catalystType]?.cvFactor || 0); // Recalculate CV
+    }
+
+    // Update total volumes after adjustments
+    totalLoadedVolume = rowsData.reduce((sum, row) => sum + row.loadedVolume, 0);
+    totalCaptureVolume = rowsData.reduce((sum, row) => sum + row.captureVolume, 0);
+
+    // Populate the TEST 1 Table
+    rowsData.forEach(row => {
+        const rowHTML = `
+            <tr>
+                <td>${row.layer}</td>
+                <td>${row.catalystType}</td>
+                <td>${row.height.toFixed(2)}</td>
+                <td>${row.loadedVolume.toFixed(2)}</td>
+                <td>${row.captureVolume.toFixed(2)}</td>
+            </tr>
+        `;
+        table.innerHTML += rowHTML;
+    });
+
+    // Update footer sums
+    document.getElementById("test1LoadedSum").textContent = totalLoadedVolume.toFixed(2);
+    document.getElementById("test1CaptureSum").textContent = totalCaptureVolume.toFixed(2);
+}
+
+function generateExactMatchTable() {
+    const reactorDiameter = parseFloat(document.getElementById("reactorDiameter").value) || 0;
+
+    // Get the current total capture volume
+    const currentCaptureSum = parseFloat(document.getElementById("currentCaptureSum").textContent) || 0;
+
+    // Fixed capture volumes for layers 4 and 5 (since they don't change)
+    const fixedLayer4CV = 0.17; // Known capture volume for layer 4
+    const fixedLayer5CV = 0.16; // Known capture volume for layer 5
+
+    // Compute the required capture volume sum for layers 1-3
+    const requiredCaptureSum = currentCaptureSum - (fixedLayer4CV + fixedLayer5CV);
+
+    // Catalyst selection based on reactor size
+    const catalystOptionsAbove5ft = ["AFS-4525", "AFS-4550", "AFS-4510"];
+    const catalystOptionsBelow5ft = ["AFS-3325", "AFS-3350", "AFS-3310"];
+    const selectedCatalysts = reactorDiameter >= 5 ? catalystOptionsAbove5ft : catalystOptionsBelow5ft;
+
+    // Fixed catalyst layers (4 and 5) -> Rings
+    const ringCatalysts = [
+        { layer: 4, type: "6.4mm Ring", height: 3, captureVolume: fixedLayer4CV },
+        { layer: 5, type: "4.8mm Ring", height: 3, captureVolume: fixedLayer5CV }
+    ];
+
+    // Clear previous table
+    const table = document.getElementById("exactMatchTable");
+    table.innerHTML = "";
+
+    let totalLoadedVolume = 0;
+    let totalCaptureVolume = fixedLayer4CV + fixedLayer5CV; // Start with fixed layers included
+    let rowsData = [];
+
+    // Base heights for layers 1-3 (starting values)
+    let baseHeights = [12, 14, 16];
+
+    // Generate adjustable layers (Layers 1-3)
+    for (let i = 0; i < 3; i++) {
+        const catalystType = selectedCatalysts[i]; // Select from the list
+        let height = baseHeights[i]; // Start with a base height
+        let loadedVolume = (height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12;
+        let captureVolume = loadedVolume * (catalystData[catalystType]?.cvFactor || 0);
+
+        rowsData.push({
+            layer: i + 1,
+            catalystType,
+            height,
+            loadedVolume,
+            captureVolume
+        });
+
+        totalLoadedVolume += loadedVolume;
+        totalCaptureVolume += captureVolume;
+    }
+
+    // Add fixed catalyst layers 4 and 5 (Rings)
+    ringCatalysts.forEach((ring) => {
+        const loadedVolume = (ring.height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12;
+        rowsData.push({
+            layer: ring.layer,
+            catalystType: ring.type,
+            height: ring.height,
+            loadedVolume,
+            captureVolume: ring.captureVolume
+        });
+
+        totalLoadedVolume += loadedVolume;
+    });
+
+    // **Adjustment: Modify only Layers 1-3 to match the exact capture volume**
+    let adjustableCaptureVolume = totalCaptureVolume - (fixedLayer4CV + fixedLayer5CV);
+    let adjustmentFactor = requiredCaptureSum / adjustableCaptureVolume;
+
+    // Apply the adjustment factor
+    for (let i = 0; i < 3; i++) {
+        rowsData[i].height *= adjustmentFactor; // Adjust heights
+        rowsData[i].loadedVolume = (rowsData[i].height * Math.PI * Math.pow(reactorDiameter / 2, 2)) / 12; // Recalculate LV
+        rowsData[i].captureVolume = rowsData[i].loadedVolume * (catalystData[rowsData[i].catalystType]?.cvFactor || 0); // Recalculate CV
+    }
+
+    // Update total volumes after adjustments
+    totalLoadedVolume = rowsData.reduce((sum, row) => sum + row.loadedVolume, 0);
+    totalCaptureVolume = rowsData.reduce((sum, row) => sum + row.captureVolume, 0);
+
+    // Populate the new table
+    rowsData.forEach(row => {
+        const rowHTML = `
+            <tr>
+                <td>${row.layer}</td>
+                <td>${row.catalystType}</td>
+                <td>${row.height.toFixed(2)}</td>
+                <td>${row.loadedVolume.toFixed(2)}</td>
+                <td>${row.captureVolume.toFixed(2)}</td>
+            </tr>
+        `;
+        table.innerHTML += rowHTML;
+    });
+
+    // Update footer sums
+    document.getElementById("exactMatchLoadedSum").textContent = totalLoadedVolume.toFixed(2);
+    document.getElementById("exactMatchCaptureSum").textContent = totalCaptureVolume.toFixed(2);
+}
+
+function updateLoadedVolumeDifference() {
+    // Get loaded volume sums
+    const currentLoadedSum = parseFloat(document.getElementById("currentLoadedSum").textContent) || 0;
+    const exactMatchLoadedSum = parseFloat(document.getElementById("exactMatchLoadedSum").textContent) || 0;
+
+    // Calculate the difference
+    const loadedVolumeDifference = currentLoadedSum - exactMatchLoadedSum;
+
+    // Find the Loaded Volume Sum cell in Test 2 Table
+    const loadedSumCell = document.getElementById("exactMatchLoadedSum");
+
+    // Create or update the difference display inside the same cell
+    let differenceDisplay = document.getElementById("loadedVolumeDifferenceDisplay");
+
+    if (!differenceDisplay) {
+        // Create a new div for the difference message
+        differenceDisplay = document.createElement("div");
+        differenceDisplay.id = "loadedVolumeDifferenceDisplay";
+        differenceDisplay.style.fontSize = "0.9em";
+        differenceDisplay.style.fontWeight = "bold";
+        differenceDisplay.style.color = "red"; // Text in red
+        differenceDisplay.style.marginTop = "5px"; // Small space from sum value
+        differenceDisplay.style.padding = "3px"; // Padding for spacing
+        differenceDisplay.style.borderRadius = "3px"; // Rounded corners
+        differenceDisplay.style.backgroundColor = "white"; // White background
+        differenceDisplay.style.display = "inline-block"; // Keep it compact
+
+        // Append the div below the loaded sum value inside the same column
+        loadedSumCell.appendChild(document.createElement("br")); // Add line break
+        loadedSumCell.appendChild(differenceDisplay);
+    }
+
+    // Update the displayed message
+    if (loadedVolumeDifference > 0) {
+        differenceDisplay.textContent = `(${loadedVolumeDifference.toFixed(2)} cubic feet less)`;
+    } else {
+        differenceDisplay.textContent = "(No reduction needed)";
+        differenceDisplay.style.color = "green"; // Green if no reduction is needed
+    }
+}
+
+    </script>
+
+
+
+
